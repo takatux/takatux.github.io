@@ -4,7 +4,7 @@ email: aliefdarul5@gmail.com
 description: > # this means to ignore newlines until "show_exerpts:"
   This is my blog. As a learner i need to keep my thecnical notes.
   Hope it will be useful. This blog containts topics such 
-  as sysadmin notes. Takatux.
+  as sysadmin notes and networking. Takatux.
 show_excerpts: true # set to true to show excerpts on the homepage
 
 # Minima date format
