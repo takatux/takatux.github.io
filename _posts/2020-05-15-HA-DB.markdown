@@ -5,6 +5,21 @@ date:   2020-05-15 06:14:19 -0000
 categories: database high-availablity
 ---
 
+Setup high availablity MariaDB Cluster. I used 2 db servers (3 is recomended) and a loadbalancer using HAProxy.
+```
+                 +++++++++++
+                 + HAPROXY +
+                 +++++++++++
+                      |
+                      |
+                ______|______
+               |             |
+               v             v
+            ++++++         ++++++            
+            +DB01+ <-----> +DB02+
+            ++++++         ++++++
+```
+
 vi /etc/hosts
 ```
 ...
