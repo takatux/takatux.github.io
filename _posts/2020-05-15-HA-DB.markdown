@@ -1,0 +1,171 @@
+---
+layout: post
+title:  "Integrating razorpay into your webapp"
+date:   2020-05-15 21:50:00 +007
+categories: database high-availablity
+---
+
+vi /etc/hosts
+```
+...
+192.168.56.101 db01
+192.168.56.102 db02
+192.168.56.103 haproxy
+...
+```
+
+Install mariadb server 10.4 and galera 4 in both servers.
+```
+sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mariadb.mirror.liquidtelecom.com/repo/10.4/ubuntu $(lsb_release -cs) main"
+apt update
+apt -y install mariadb-server -y
+mysql_secure_installation
+apt-get install mariadb-server galera-4 mariadb-client libmariadb3 mariadb-backup mariadb-common -y
+```
+Configure mariadb default character set. I used db01 as role master of the galera cluster.
+```
+character-set-server = utf8
+collation-server = utf8_unicode_ci
+character_set_server = utf8
+```
+Create new galera configuration file. I set the bind-address to 192.168.56.101 (the server local address).\ndb01:
+```
+vim /etc/mysql/mariadb.conf.d/galera.cnf
+...
+[mysqld]
+bind-address=192.168.56.101
+default_storage_engine=InnoDB
+binlog_format=row
+innodb_autoinc_lock_mode=2
+
+# Galera cluster configuration
+wsrep_on=ON
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_cluster_address="gcomm://192.168.56.101,192.168.56.102"
+wsrep_cluster_name="mariadb-galera-cluster"
+wsrep_sst_method=rsync
+
+# Cluster node configuration
+wsrep_node_address="192.168.56.101"
+wsrep_node_name="galera-db-01"
+
+```
+db02
+```
+vim /etc/mysql/mariadb.conf.d/galera.cnf
+...
+[mysqld]
+bind-address=192.168.56.102
+default_storage_engine=InnoDB
+binlog_format=row
+innodb_autoinc_lock_mode=2
+
+# Galera cluster configuration
+wsrep_on=ON
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_cluster_address="gcomm://192.168.56.101,192.168.56.102"
+wsrep_cluster_name="mariadb-galera-cluster"
+wsrep_sst_method=rsync
+
+# Cluster node configuration
+wsrep_node_address="192.168.56.102"
+wsrep_node_name="galera-db-02"
+```
+
+On db01 server , stop mariadb service.
+```
+systemctl stop mariadb
+galera_new_cluster
+```
+check if the galera cluster is running.
+```
+root@ubuntu:~# mysql -u root -p -e "show status like 'wsrep_%'"
+Enter password: 
++-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| Variable_name                 | Value                                                                                                                                          |
++-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------+
+| wsrep_local_state_uuid        | 246c31bb-9627-11ea-b0c9-43bd69f31000                                                                                                           |
+| wsrep_protocol_version        | 10                                                                                                                                             |
+| wsrep_last_committed          | 1                                                                                                                                              |
+| wsrep_replicated              | 0                                                                                                                                              |
+
+....
+```
+On db02 server, start mariadb service.
+```
+systemctl start mariadb
+```
+Check cluster size. The value should be 2 for there are 2 db servers in the cluster.
+```
+root@ubuntu:~# mysql -u root -p -e "show status like 'wsrep_cluster_size'"
+Enter password: 
++--------------------+-------+
+| Variable_name      | Value |
++--------------------+-------+
+| wsrep_cluster_size | 2     |
++--------------------+-------+
+```
+Check if the cluster is working properly. I created database on db01. Make sure that it was created on db02 as well
+```
+# on db01
+mysql -uroot -p
+CREATE DATABASE db_galde;
+
+# on db02
+mysql -uroot -p
+SHOW DATABASES;
+```
+After that, i created new user on db02 and granted all privileges to the new user.
+```
+CREATE USER 'usrgalde'@'%' IDENTIFIED BY 'qwerty';
+GRANT ALL PRIVILEGES ON db_galde.* TO 'usrgalde'@'%';
+
+# run this query on db01
+select user, password, host from mysql.user;
+```
+
+Install HAProxy Server.\n
+```
+sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+sudo apt-get install haproxy -y
+```
+Configure the haproxy to listen to port 3306 and redirect it to each servers. I used `leastconn` balance method.
+```
+vi /etc/haproxy/haproxy.cfg
+...
+frontend galera_cluster_frontend
+    bind 192.168.56.103:3306
+    mode tcp
+    option tcplog
+    default_backend galera_cluster_backend
+
+backend galera_cluster_backend
+    mode tcp
+    option tcpka
+    balance leastconn
+    server db-server-01 192.168.56.101:3306  check weight 1
+    server db-server-02 192.168.56.102:3306  check weight 1
+...
+
+```
+Verify the configuration and make sure that the haproxy is listening to port 3306.
+```
+haproxy -c -V -f /etc/haproxy/haproxy.cfg
+systemctl restart haproxy
+ss -tupln | grep 3306
+```
+
+I tried to connect to the database using Sequel Pro from my host.\n
+
+Create table and verify that the table is created on both db servers.
+```
+MariaDB [db_galde]> show tables;
++--------------------+
+| Tables_in_db_galde |
++--------------------+
+| tb_ujicoba         |
++--------------------+
+1 row in set (0.001 sec)
+```
