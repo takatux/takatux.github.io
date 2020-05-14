@@ -45,7 +45,7 @@ character-set-server = utf8
 collation-server = utf8_unicode_ci
 character_set_server = utf8
 ```
-Create new galera configuration file. I set the bind-address to 192.168.56.101 (the server local address).</br>
+Create new galera configuration file. I set the bind-address to 192.168.56.101 (the server local address). \
 db01
 ```
 vim /etc/mysql/mariadb.conf.d/galera.cnf
@@ -173,7 +173,7 @@ systemctl restart haproxy
 ss -tupln | grep 3306
 ```
 
-I tried to connect to the database using Sequel Pro from my host.</br>
+I tried to connect to the database using Sequel Pro from my host.  
 
 Create table and verify that the table is created on both db servers.
 ```
