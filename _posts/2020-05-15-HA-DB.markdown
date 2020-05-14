@@ -45,7 +45,8 @@ character-set-server = utf8
 collation-server = utf8_unicode_ci
 character_set_server = utf8
 ```
-Create new galera configuration file. I set the bind-address to 192.168.56.101 (the server local address).\ndb01:
+Create new galera configuration file. I set the bind-address to 192.168.56.101 (the server local address).</br>
+db01
 ```
 vim /etc/mysql/mariadb.conf.d/galera.cnf
 ...
@@ -141,7 +142,7 @@ GRANT ALL PRIVILEGES ON db_galde.* TO 'usrgalde'@'%';
 select user, password, host from mysql.user;
 ```
 
-Install HAProxy Server.\n
+Install HAProxy Server.
 ```
 sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 sudo apt-get install haproxy -y
@@ -172,7 +173,7 @@ systemctl restart haproxy
 ss -tupln | grep 3306
 ```
 
-I tried to connect to the database using Sequel Pro from my host.\n
+I tried to connect to the database using Sequel Pro from my host.</br>
 
 Create table and verify that the table is created on both db servers.
 ```
