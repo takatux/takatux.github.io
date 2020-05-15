@@ -174,8 +174,8 @@ ss -tupln | grep 3306
 ```
 
 I tried to connect to the database using Sequel Pro from my host.  
-- <img src="images/sequelpro_connect.png" alt="sequel pro" width="800"/>. 
-- <img src="images/sequelpro_createtable.png" alt="sequel pro" class="inline" width="800"/>
+- <img src="images/sequelpro_connect.png" alt="sequel pro" class="img-responsive"/>. 
+- <img src="images/sequelpro_createtable.png" alt="sequel pro" class="img-responsive"/>
 
 Create table and verify that the table is created on both db servers.
 ```
