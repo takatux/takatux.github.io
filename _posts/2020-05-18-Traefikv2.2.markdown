@@ -4,7 +4,10 @@ title:  "Traefik 2.2 as Reverse Proxy for Docker"
 date:   2020-05-18 17:35:19 -0000
 categories: docker reverse-proxy traefik
 ---
+Reverse proxy is very usefull tool for microservice architecture. It is easy to use because we don't need to configure the proxy (traefik) each time we deploy a new app. You only need to add lables to the new app, then traefik will recognize it.  
+Here is my first configuration of traefik v2.2 that i have learned for few days. Needed some effort to understand the documentation. for me, it is not realy easy to understand how the configuration works maybe there is some missconfiguration that just accidently worked. I'm still on progress to understand this tool comprehensively.  
 
+I configured the traefik as follows,  
 ```
 version: "3.3"
 
@@ -14,15 +17,18 @@ services:
     image: "traefik:v2.2"
     container_name: "traefik"
     command:
-      #- "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
+      # enable docker provider for traefik
       - "--providers.docker.exposedbydefault=false"
+      # configure the entrypoint for request
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
+      # this is the defult port for traefik monitoring
       - "8080:8080"
     volumes:
+    # mount the docker socket, the traefik is enable to recognize exposed docker container
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 ```
 Run `docker-compose up -d traefik`. Check docker ps. Open ip-address:8080 in the browser.  
@@ -34,18 +40,22 @@ Add new service named apache.
      container_name: "apache"
      labels:
        - "traefik.enable=true"
+       # setup service entrypoint by port 80 that has been declared as web. You can modify it as your desire
        - "traefik.http.routers.apache-route.entrypoints=web"
+       # configure the rule for traefik to route Host oela.com with /apache prefix to this service
        - "traefik.http.routers.apache-route.rule=Host(`oela.com`) && PathPrefix(`/apache`)"
        - "traefik.http.routers.apache-route.service=apache-service@docker"
        - "traefik.http.routers.apache-route.middlewares=apache-middleware@docker"
+       # define the service (apache-service) to use port 80 for loadbalancer
        - "traefik.http.services.apache-service.loadbalancer.server.port=80"
+       # configure stripprefix to strip /apache prefix because the application is in root directory not in /apache directory 
        - "traefik.http.routers.apache-route.middlewares=apache-stripprefix"
        - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/apache"
 ...
 ```
 Run `docker-compose up -d apache`. Check docker ps. Mapping ip-address locally to oela.com and open oela.com in the browser. There will be 404 error.  
 Open oela.com/apache to access the apache container.  
-Add new service named nginx.  
+Same as the apache labels configuration, add new service named nginx.  
 ```
   nginx:
      image: "nginx"
