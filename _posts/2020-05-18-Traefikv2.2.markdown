@@ -1,0 +1,70 @@
+---
+layout: post
+title:  "Traefik 2.2 as Reverse Proxy for Docker"
+date:   2020-05-18 17:35:19 -0000
+categories: docker reverse-proxy traefik
+---
+
+```
+version: "3.3"
+
+services:
+
+  traefik:
+    image: "traefik:v2.2"
+    container_name: "traefik"
+    command:
+      #- "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+```
+Run `docker-compose up -d traefik`. Check docker ps. Open ip-address:8080 in the browser.  
+Add new service named apache.  
+```
+...
+  apache:
+     image: "httpd"
+     container_name: "apache"
+     labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.apache-route.entrypoints=web"
+       - "traefik.http.routers.apache-route.rule=Host(`oela.com`) && PathPrefix(`/apache`)"
+       - "traefik.http.routers.apache-route.service=apache-service@docker"
+       - "traefik.http.routers.apache-route.middlewares=apache-middleware@docker"
+       - "traefik.http.services.apache-service.loadbalancer.server.port=80"
+       - "traefik.http.routers.apache-route.middlewares=apache-stripprefix"
+       - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/apache"
+...
+```
+Run `docker-compose up -d apache`. Check docker ps. Mapping ip-address locally to oela.com and open oela.com in the browser. There will be 404 error.  
+Open oela.com/apache to access the apache container.  
+Add new service named nginx.  
+```
+  nginx:
+     image: "nginx"
+     container_name: "nginx"
+     labels:
+       - "traefik.enable=true"
+       - "traefik.http.routers.nginx-route.entrypoints=web"
+       - "traefik.http.routers.nginx-route.rule=Host(`oela.com`) && PathPrefix(`/nginx`)"
+       - "traefik.http.routers.nginx-route.service=nginx-service@docker"
+       - "traefik.http.routers.nginx-route.middlewares=nginx-middleware@docker"
+       - "traefik.http.services.nginx-service.loadbalancer.server.port=80"
+       - "traefik.http.routers.nginx-route.middlewares=nginx-stripprefix"
+       - "traefik.http.middlewares.nginx-stripprefix.stripprefix.prefixes=/nginx"
+```
+Run `docker-compose up -d apache`. Check docker ps. Open oela.com/nginx to access the apache container.  
+<img src="/images/webserver_container.png" alt="webserver containers" class="img-responsive"/>
+
+
+
+
+
+
