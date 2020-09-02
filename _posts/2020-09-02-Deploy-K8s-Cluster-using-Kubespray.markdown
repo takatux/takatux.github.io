@@ -4,6 +4,8 @@ title:  "Deploy HA Kubernetes Using Kubespray"
 date:   2020-09-02 08:01 -0000
 categories: orchestration high-availablity
 ---
+Kubespray is a composition of Ansible playbooks, inventory, provisioning tools, and domain knowledge for generic OS/Kubernetes clusters configuration management tasks. (kubernets.ioo)  
+I deployed kube cluster on my kvm. I am using 3 servers which are all workers and 2 servers as masters.  
 ## Install Required Packages
 ```
 apt-get install python3-netaddr
