@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Deploy HA Kubernetes Using Kubespray"
+title:  "Deploy Kubernetes Using Kubespray"
 date:   2020-09-02 08:01 -0000
 categories: orchestration high-availablity
 ---
