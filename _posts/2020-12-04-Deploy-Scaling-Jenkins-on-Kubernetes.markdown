@@ -136,12 +136,12 @@ kubectl apply -f service.yml
 > Manage Jenkins >> Manage Nodes and Clouds >> Configure Clouds >> Add New Cloud >> Kubernetes  
 The configuration looks like this.  
 ### Kubernetes Cluster Configuration
-- <img src="/images/scaling-jenkins-1.png" alt="sequel pro" class="img-responsive"/>  
-- <img src="/images/scaling-jenkins-2.png" alt="sequel pro" class="img-responsive"/>  
+<img src="/images/scaling-jenkins-1.png" alt="sequel pro" class="img-responsive"/>  
+<img src="/images/scaling-jenkins-2.png" alt="sequel pro" class="img-responsive"/>  
 ### Add the k8s config file
-- <img src="/images/scaling-jenkins-3.png" alt="sequel pro" class="img-responsive"/>  
+<img src="/images/scaling-jenkins-3.png" alt="sequel pro" class="img-responsive"/>  
 ### Pod Template Configuration
-- <img src="/images/scaling-jenkins-4.png" alt="sequel pro" class="img-responsive"/>  
+<img src="/images/scaling-jenkins-4.png" alt="sequel pro" class="img-responsive"/>  
 
 ## Setup Jenkins Master 
 > Manage Jenkins >> Manage Nodes and Clouds >> Master >> set `# of executors` to 0  
