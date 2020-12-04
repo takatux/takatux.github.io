@@ -4,13 +4,13 @@ title:  "Deploy Scaling Jenkins Master-Slave on Kubernetes Cluster"
 date:   2020-12-04 13:38:00 -0000
 categories: kubernetes jenkins ci/cd
 ---
-The goal of this project is running Jenkins jobs in kubernetes pods.
+The goal of this project is running Jenkins jobs in kubernetes pods.  
 Environment :  
 - Kubernetes 1.19  
 - NFS Storage  
 - Jenkins 2.249.3  
   
-  
+
 # Create Working Directory  
 ```
 mkdir /home/ubuntu/jenkins-k8s
