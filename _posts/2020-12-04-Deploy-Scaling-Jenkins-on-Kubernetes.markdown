@@ -10,8 +10,7 @@ Environment :
 - NFS Storage  
 - Jenkins 2.249.3  
   
-
-# Create Working Directory  
+### Create Working Directory  
 ```
 mkdir /home/ubuntu/jenkins-k8s
 cd /home/ubuntu/jenkins-k8s
