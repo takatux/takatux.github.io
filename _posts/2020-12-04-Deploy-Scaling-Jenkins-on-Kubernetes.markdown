@@ -15,7 +15,7 @@ Environment :
 mkdir /home/ubuntu/jenkins-k8s
 cd /home/ubuntu/jenkins-k8s
 ```  
-# Create Dockerfile Jenkins Master
+## Create Dockerfile Jenkins Master
 ```
 vi Dockerfile-jenkins-master 
 
@@ -37,7 +37,7 @@ sudo docker build -f Dockerfile-jenkins-master -t takatux/jenkins-master-scaling
 sudo docker push takatux/jenkins-master-scaling:latest
 ```
 
-# Create PVC for jenkins master  
+## Create PVC for jenkins master  
 ```
 vi jenkins-volume.yaml
 ---
@@ -56,7 +56,7 @@ spec:
 kubectl apply -f jenkins-volume.yaml
 ```  
 
-# Create Jenkins Master Deployment
+## Create Jenkins Master Deployment
 ```
 vi deployment.yml 
 ---
@@ -105,7 +105,7 @@ spec:
            claimName: jenkins-pvc
 ```
 
-# Create Service for Jenkins Master URL and Jenkins Slave tunnel
+## Create Service for Jenkins Master URL and Jenkins Slave tunnel
 ```
 vi service.yml 
 ---
@@ -137,8 +137,8 @@ spec:
 kubectl apply -f service.yml
 ```
 
-# Configure Cloud  
-## Add new cloud  
+## Configure Cloud  
+### Add new cloud  
 > Manage Jenkins >> Manage Nodes and Clouds >> Configure Clouds >> Add New Cloud >> Kubernetes  
 The configuration looks like this.  
 ### Kubernetes Cluster Configuration
@@ -149,10 +149,10 @@ The configuration looks like this.
 ### Pod Template Configuration
 <img src="/images/scaling-jenkins-4.png" alt="sequel pro" class="img-responsive"/>  
 
-## Setup Jenkins Master 
+### Setup Jenkins Master 
 > Manage Jenkins >> Manage Nodes and Clouds >> Master >> set `# of executors` to 0  
 
-# Test Freestyle Project  
+## Test Freestyle Project  
 > New Item >> Freestyle Project >> OK  
 > General >> Check Restrict where this project can be run >> Label Exp: jenkins-slave-alpine  
 > Build triggers >> Execute Shell >> Command : hostname  
