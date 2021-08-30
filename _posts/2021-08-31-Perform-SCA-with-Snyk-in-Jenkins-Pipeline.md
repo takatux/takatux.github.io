@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Perform SCA with Snyk in Jenkins Pipeline"
+date:   2021-08-30 11:20:00 -0000
+categories: devsecops jenkins ci/cd
+---
 # Jalankan SCA Tool Snyk Scanner pada Pipeline
 Snyk : tool scanner untuk menganalisa tingkat keamanan code  
 > Snyk Language Support : https://support.snyk.io/hc/en-us/articles/360020352437-Language-support-summary
