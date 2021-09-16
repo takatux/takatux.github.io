@@ -4,9 +4,10 @@ title:  "Perform SCA with Snyk in Jenkins Pipeline"
 date:   2021-08-30 11:20:00 -0000
 categories: devsecops jenkins ci/cd
 ---
-# Jalankan SCA Tool Snyk Scanner pada Pipeline
+
 Snyk : tool scanner untuk menganalisa tingkat keamanan code  
-> Snyk Language Support : https://support.snyk.io/hc/en-us/articles/360020352437-Language-support-summary
+> Snyk Language Support : https://support.snyk.io/hc/en-us/articles/360020352437-Language-support-summary  
+
 ## Instalasi dan konfigurasi Snyk Plugin di Jenkins
 1. Signup Snyk dengan menggunakan akun github
 2. Install Snyk Plugin di jenkins : Manage Jenkins -> Manage Plugins -> Available -> Snyk Security Plugin -> Install and Restart
@@ -20,6 +21,7 @@ Snyk : tool scanner untuk menganalisa tingkat keamanan code
 9. Buat kredensial snyk di Jenkins
 ![image](/images/Snyk-2.png)
 10. Save 
+
 ## Integrasi Snyk dengan Pipeline
 1. Dashboard > book-pipeline > Pipeline Syntax > Generate Syntax
 ![image](/images/Snyk-3.png)
