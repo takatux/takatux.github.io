@@ -13,8 +13,8 @@ I deployed kube cluster on my kvm.  Using 4 servers which 2 servers as masters a
 ```
 git clone https://github.com/kubernetes-sigs/kubespray  
 cd kubespray/  
-sudo apt-get install python3-netaddr python3-pip  
-sudo pip3 install -r requirements.txt  
+sudo apt-get install python3-netaddr python3-pip -y 
+sudo pip3 install -r requirements.txt
 sudo echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf  
 ```
 
@@ -64,7 +64,7 @@ no_proxy_exclude_workers: false
 
 ## Setup Network plugin in k8s-cluster.yaml
 
-`vi inventory/cluster01/group_vars/k8s-cluster/k8s-cluster.yml`
+`vi inventory/cluster01/group_vars/k8s_cluster/k8s-cluster.yml`
 
 ```
 ...
@@ -73,7 +73,7 @@ kube_network_plugin: flannel
 ```
 
 ## Deploy Kubernetes Cluster
-`ansible-playbook -i inventory/cluster01/hosts.yaml  --become --become-user=root cluster.yml`
+`ansible-playbook -i inventory/cluster01/inventory.ini  --become --become-user=root cluster.yml`
 
 ## Verify Deployment
 ```
