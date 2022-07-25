@@ -81,7 +81,7 @@ kubectl apply -f cluster-issuer.yaml
 
 Basically, we need to define the issuer in ingress manifest so that ingress can request a valid certificate to the Cert-Manager.  
 
-Here is the ingress of  dispatch for example :  
+Here is the ingress for example :  
 
 ```
 apiVersion: networking.k8s.io/v1
