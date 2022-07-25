@@ -5,8 +5,7 @@ date:   2022-07-25 02:15:00 -0000
 categories: devsecops kubernetes
 ---
 
-**Use Case**
-
+Use Case :  
 Application need to be able to be access from public. There are a bunch of application that have been deployed in kubernetes. Each application service has specific hostname that identified by domain. So, we need an ingress gateway to route each domain to particular service. In this case we are using [Nginx-Ingress](https://github.com/kubernetes/ingress-nginx).  
 
 The connection between user and server also must be a secure connection. So we need to enable TLS to be able to use HTTPS protocol.  In this case, we decided to use [Cert-Manager](https://cert-manager.io/v0.14-docs) as certificate issuer.  
