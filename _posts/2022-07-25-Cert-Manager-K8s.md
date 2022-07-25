@@ -74,7 +74,7 @@ Apply the manifest
 kubectl apply -f cluster-issuer.yaml
 ```
 
-> *you can also create namespace issuer instead of clusterIssuer if need*
+> *you can also create namespace issuer instead of clusterIssuer if needed*
 > 
 
 ### Utilize Cluster Issuer
