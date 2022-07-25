@@ -13,7 +13,7 @@ sass:
   sass_dir: _sass
 plainwhite:
   name: takatux
-  tagline: Learner. IT Staff
+  tagline: Cloud Engineer
   date_format: "%b %-d, %Y"
   sitemap: true # set to true to generate sitemap.xml content
 
@@ -50,7 +50,7 @@ plainwhite:
 
 # Build settings
 theme: plainwhite
-remote_theme: thelehhman/plainwhite-jekyll
+#remote_theme: thelehhman/plainwhite-jekyll
 
 plugins:
   - jekyll-seo-tag
