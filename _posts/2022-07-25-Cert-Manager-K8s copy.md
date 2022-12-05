@@ -6,3 +6,4 @@ categories: devsecops kubernetes
 ---
 
 Hello, welcome to Leads Indonesia! This is a simulation.
+Hello, this is StudiDevops Demoing CI/CD
